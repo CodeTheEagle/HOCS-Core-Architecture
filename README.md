@@ -1,5 +1,10 @@
 # HOCS-Core-Architecture
 Official software stack and driver implementation for HOCS (Hybrid Optical Computing System) - A 128-Channel Neuromorphic Photonic Processor.
+![Status](https://img.shields.io/badge/Status-Prototype-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Platform](https://img.shields.io/badge/Platform-FPGA%20%7C%20Photonics-blue)
+![Built With](https://img.shields.io/badge/Built%20With-Python%20%7C%20KLayout-yellow)
+
 # HOCS: Hybrid Optical Computing System 🚀
 > **The World's First 128-Channel Neuromorphic Photonic Processor with CuO Memristive Layers.**
 
