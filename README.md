@@ -28,20 +28,21 @@ HOCS-Core-Architecture/
 ├── api/              # FastAPI backend for matrix operations
 ├── simulation/       # ANSYS Lumerical scripts (planned)
 └── docs/             # Technical datasheets and patent info
+
+
 ---
 
-## 🗺️ Roadmap (Yol Haritası & Eksikler)
+## 🗺️ Roadmap & Future Work
 
-Şu an proje **Prototip** aşamasındadır. Geliştirme süreci aşağıdaki gibidir:
+The project is currently in the **Prototyping Phase**. Our development timeline is as follows:
 
-- [x] **Faz 1:** Mimarinin tasarlanması (Tamamlandı)
-- [x] **Faz 2:** Python simülasyon kodlarının yazılması (Tamamlandı)
-- [ ] **Faz 3:** FPGA üzerinde PCIe haberleşme arayüzü (Devam Ediyor)
-- [ ] **Faz 4:** Bakır Oksit (CuO) termal gürültü testleri
-- [ ] **Faz 5:** İlk fiziksel çip üretimi (MPW Süreci)
+- [x] **Phase 1:** Core Architecture Design & Layout (Completed)
+- [x] **Phase 2:** Python Simulation Framework & Driver Development (Completed)
+- [ ] **Phase 3:** FPGA PCIe Gen3 Communication Interface (In Progress)
+- [ ] **Phase 4:** Copper Oxide (CuO) Memristor Thermal Noise Benchmarking
+- [ ] **Phase 5:** Physical Chip Tape-out (MPW Process)
 
-## ⚠️ Known Issues (Bilinen Sorunlar)
+## ⚠️ Known Issues & Limitations
 
-1. Simülasyon şu an sadece CPU üzerinde çalışıyor, GPU hızlandırma eklenecek.
-2. Windows ortamında bazı kütüphane çakışmaları olabilir (Linux önerilir).
-
+1. **Simulation Performance:** The current simulation script runs primarily on CPU. GPU acceleration (CUDA) support is planned for the next release.
+2. **OS Compatibility:** Minor library conflicts may occur on Windows environments. **Linux (Ubuntu 20.04+) is highly recommended** for development.
