@@ -1,0 +1,69 @@
+import numpy as np
+
+class HOCS_Core_Sim:
+    """
+    HOCS (Hybrid Optical Computing System) Physics-Aware Simulator.
+    Simulates the behavior of CuO memristor crossbars under analog noise.
+    """
+    
+    def __init__(self, size=4, dac_bits=8, adc_bits=8, noise_floor=0.05):
+        self.size = size
+        self.dac_bits = dac_bits
+        self.adc_bits = adc_bits
+        self.noise_floor = noise_floor # Analog gürültü oranı (%5)
+        
+        # Fiziksel Parametreler (Sanal)
+        self.v_read = 0.5  # Okuma voltajı
+        self.g_on = 1e-3   # İletkenlik (Siemens) - ON durumu
+        self.g_off = 1e-6  # İletkenlik (Siemens) - OFF durumu
+        
+        print(f"HOCS Core Initialized: {size}x{size} Matrix, {dac_bits}-bit Precision")
+
+    def _quantize(self, value, bits):
+        """Analog sinyali dijital bit seviyesine indirger (DAC/ADC Simülasyonu)"""
+        levels = 2**bits - 1
+        return np.round(value * levels) / levels
+
+    def _add_thermal_noise(self, signal_matrix):
+        """Sisteme termal gürültü ve atış gürültüsü (Shot Noise) ekler"""
+        noise = np.random.normal(0, self.noise_floor, signal_matrix.shape)
+        return signal_matrix + noise
+
+    def photonic_multiply(self, input_vector, weight_matrix):
+        """
+        Matris çarpımını fotonik/analog fizik kurallarına göre simüle eder.
+        V_out = I_sum * R_gain
+        """
+        # 1. DAC Katmanı: Dijital veriyi Voltaja çevir (Quantization)
+        analog_input = self._quantize(input_vector, self.dac_bits)
+        
+        # 2. Crossbar Katmanı: V = I * R (Ohm Kanunu)
+        # Gerçekte ışık geçirgenliği veya direnç değişimidir.
+        # İdeal çarpım + Gürültü eklenir.
+        ideal_current = np.dot(weight_matrix, analog_input)
+        noisy_current = self._add_thermal_noise(ideal_current)
+        
+        # 3. ADC Katmanı: Analog akımı tekrar Dijitale çevir
+        # Doygunluk (Saturation) kontrolü: Akım belli bir seviyeyi geçemez.
+        clipped_signal = np.clip(noisy_current, 0, 1.0)
+        digital_output = self._quantize(clipped_signal, self.adc_bits)
+        
+        return digital_output
+
+# --- TEST SENARYOSU ---
+if __name__ == "__main__":
+    # 4x4 Matris Örneği
+    sim = HOCS_Core_Sim(size=4, dac_bits=8, noise_floor=0.02)
+    
+    # Rastgele bir Görüntü Vektörü ve Ağırlık Matrisi
+    input_vec = np.random.rand(4)
+    weights = np.random.rand(4, 4)
+    
+    print("\n--- HOCS Simulation Step ---")
+    print("Input (Digital):", np.round(input_vec, 2))
+    
+    result = sim.photonic_multiply(input_vec, weights)
+    
+    print("Output (Analog-to-Digital Result):", result)
+    print("Simulation Complete: Noise and Quantization applied.")
+
