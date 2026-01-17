@@ -77,6 +77,7 @@ HOCS-Project/
 ├── hdl/                    # Verilog Hardware Design
 ├── hardware/               # Constraints & PCB
 └── README.md
+
 ## 🏗️ System Architecture
 The following diagram illustrates the full stack data flow from PyTorch to the Optical Core.
 
