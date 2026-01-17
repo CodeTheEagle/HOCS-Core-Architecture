@@ -1,101 +1,127 @@
 # HOCS: Hybrid Optical Computing System 🇹🇷
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Version](https://img.shields.io/badge/version-2.4.0--alpha-blue)
-![License](https://img.shields.io/badge/license-MIT%20%2B%20CERN-orange)
-![Platform](https://img.shields.io/badge/platform-Xilinx%20Kria%20%7C%20Linux-lightgrey)
-![Architecture](https://img.shields.io/badge/architecture-Hybrid%20Optical-red)
 
+![Status](https://img.shields.io/badge/Status-Prototyping-orange) ![Version](https://img.shields.io/badge/Version-2.4.0--alpha-blue) ![Platform](https://img.shields.io/badge/Platform-Xilinx%20Kria_KV260-lightgrey) ![License](https://img.shields.io/badge/License-MIT%20%2B%20CERN-green)
 
-![Status](https://img.shields.io/badge/Status-Prototyping-orange)
-![Platform](https://img.shields.io/badge/Platform-Xilinx%20Kria-red)
-![Language](https://img.shields.io/badge/Language-Python%20%7C%20Verilog-blue)
+> **Note:** This project is currently being maintained from a mobile device due to a critical hardware failure on the main development workstation. Please excuse any formatting glitches.
+
+---
 
 ## 👋 Hi, I'm Yusuf from Turkey
-This is an open-source research project I started with my friends to solve a problem we all hate: **Computers getting hot and slow.**
+This is an open-source research project aimed at solving the "Thermal Wall" and "Memory Wall" problems in modern AI computing.
 
-I am a university student, not a big corporation. I am building this with limited resources. In fact, **my workstation motherboard burned down** last week while running simulations for this project. Currently, I am maintaining this repo from my phone and internet cafes until I can get hardware support. 
+I am an undergraduate student building this with limited resources. In fact, **my workstation motherboard burned down** last week while running heavy behavioral simulations for this project. Despite the setbacks, I am committed to finishing this architecture.
 
-So if you see bugs or simple code, please understand that this is a work in progress by a student who is trying to learn.
+This repository hosts the full **logic flow, custom drivers, compilers, and hardware designs (Verilog/PCB)** we have developed so far.
 
 ---
 
 ## 💡 What is HOCS?
-HOCS stands for **Hybrid Optical Computing System**. 
+**HOCS** stands for **Hybrid Optical Computing System**.
 
-Right now, AI chips use electrons (electricity) to do math. Electrons have mass, they create friction, and friction creates heat. That's why your GPU fan screams when you play games or train AI.
+Modern AI chips use electrons, which create heat and latency. We are designing a prototype processor unit using **Copper Oxide (CuO)** memristors that interacts with light (photons) to perform **Matrix Multiplication (GEMM)** at near light-speed, with drastically reduced thermal output.
 
-**Our Idea:** What if we use **Light (Photons)** instead of electrons for the heavy math?
-We are designing a special processor unit using **Copper Oxide (CuO)** memristors that interacts with light to perform Matrix Multiplication (the core of all AI) at the speed of light, with almost zero heat.
-
-### How it works (The Plan)
-1.  **Input:** Python sends matrix data to the FPGA (Xilinx Kria).
-2.  **Conversion:** The FPGA converts digital numbers into Analog Voltage.
-3.  **The Magic:** Voltage passes through our custom CuO sensor layer. The physics of the material performs the multiplication instantly.
-4.  **Output:** We read the result back, convert it to digital, and send it to the PC.
+### How it works (The Concept)
+1.  **Input:** Python (PyTorch) sends matrix data to the FPGA (Xilinx Kria).
+2.  **Conversion:** The FPGA converts 32-bit digital numbers into precise Analog Voltage signals via high-speed DACs.
+3.  **The Physics:** Voltage is applied across our custom CuO memristor crossbar array. The resulting current, modulated by the memristance (representing weights), performs the multiplication instantly in the analog domain ($I = V \times G$).
+4.  **Output:** We read the resulting currents back via ADCs, convert them to digital, and stream them back to the host PC.
 
 ---
 
-## 📂 Project Structure
-Since my main workstation hardware is currently down, I am maintaining the core architecture files here. Despite the limitations, the repository contains the full logic flow:
+## 🧠 Theoretical Foundation & Expected Performance
 
-```text
-HOCS-Project/
-├── backend/                # API & Main Logic
-├── compiler/               # <--- NEW! (PyTorch to Optical-ASM Compiler)
-│   └── hocs_torch_bridge.py
-├── security/               # <--- NEW! (Post-Quantum Cryptography)
-│   └── post_quantum_auth.c
-├── memory/                 # Custom DMA Allocator
-├── asm/                    # ARM64 Assembly Kernels
-├── cpp_core/               # C++ Physics Engine
-├── kernel_driver/          # Linux Kernel Module
-├── hdl/                    # Verilog Hardware Design
-├── hardware/               # Constraints & PCB
-├── tests/                  # Unit Tests
-├── Dockerfile              # Container Setup
-└── README.md
+*This section addresses the mathematical model driving our architecture.*
 
-## ⚠️ Known Issues / FAQ
-**Q: Is this ChatGPT code?**
-A: I used AI tools to help check my English grammar and format the Readme because I want it to look professional. But the **Architecture, the Logic, and the Verilog designs are 100% human-made**.
+Since physical hardware testing is currently paused due to lack of manufacturing funds, we rely on **mathematical modeling** and **behavioral simulations** to validate our approach.
 
-**Q: Where is the physical chip?**
-A: We have the PCB designs ready (Gerber files). We need funding/support to manufacture the first prototype.
+### The Core Math (Analog MAC)
+The fundamental operation is the Analog Multiply-Accumulate (MAC), modeled as:
 
-**Q: Why is the simulation code simple?**
-A: It is a behavioral model to verify logic flow (AXI Stream handshake, etc.). Real physics simulation requires expensive software (Lumerical) which I don't have access to right now.
+$$I_{out}[j] = \sum_{i=0}^{N-1} V_{in}[i] \cdot G_{ij}$$
+
+Where:
+* $V_{in}$ is the input voltage vector (activations).
+* $G_{ij}$ is the conductance matrix of the memristors (weights).
+* $I_{out}$ is the resulting current vector.
+
+### Projected Benchmark (Simulated vs. Silicon)
+Based on our architectural parameters (128x128 tiles, 1GHz effective analog bandwidth), here are the **theoretical design targets** compared to a standard CPU:
+
+| Metric | Standard CPU (Intel i7) | HOCS Core (Theoretical Target) | Estimated Improvement |
+| :--- | :--- | :--- | :--- |
+| **Operation Principle** | Digital (CMOS) | Analog (Memristive/Optical) | - |
+| **Matrix Latency** | ~50 µs | **< 1 µs** (Analog propagation) | ~50x Faster |
+| **Energy per MAC** | ~10 pJ | **~0.1 pJ** (Target) | ~100x More Efficient |
+| **Thermal Output** | High (Active Cooling) | **Near-Zero** (Passive) | **Critical Solve** |
+
+> *Disclaimer: These figures are targeted design goals based on simulations. Real-world hardware results will vary.*
+
+---
+
+## 📂 Project Structure (Architecture Map)
+
+Instead of a complex file tree, here is a breakdown of the system modules available in this repository:
+
+| Module / Directory | Category | Role in Architecture |
+| :--- | :--- | :--- |
+| `backend/` | 🧠 **AI Logic** | Main Python API service & AXI driver logic. |
+| `compiler/` | 🔄 **Software** | Transpiler converting PyTorch models to Optical-ASM. |
+| `security/` | 🛡️ **Security** | Lattice-based cryptography (Post-Quantum) implementation. |
+| `kernel_driver/` | ⚡ **System** | Custom Linux Kernel Module (C) for DMA memory management. |
+| `hdl/` | 🔌 **Hardware** | Verilog design files for FPGA logic & SCRAM safety. |
+| `asm/` | ⚙️ **Low Level** | Hand-optimized ARM64 Assembly kernels for Kria SoC. |
+| `hardware/` | 📐 **PCB** | Schematics, Board Constraints, and Gerber files. |
+| `simulation/` | 🧪 **Test** | Behavioral models for verifying AXI handshakes. |
+
+---
+
+## ⚠️ Current Limitations & Validation Status
+
+We believe in transparent engineering. Here is the honest status of our validation efforts:
+
+* ❌ **Physical Hardware Test Results:** Not available yet. PCB designs are ready, but we await funding for manufacturing the first prototype ("First Light").
+* ⚠️ **Scientific Validation:** Currently limited to high-level behavioral simulations (Python/C++) to verify logic flow. We lack access to professional physics simulators (e.g., Lumerical).
+* ⚠️ **Academic Paper:** A draft whitepaper exists detailing the architecture. A formal academic paper cannot be published without empirical data.
+
+---
+
+## ⚡ Quick Start (Simulation API)
+
+You can run the full HOCS software stack in simulation mode using Docker.
+
+**Prerequisites:** Docker installed on your machine.
+
+1.  **Clone the repository:**
+    `git clone https://github.com/CodeTheEagle/HOCS-Core-Architecture.git`
+2.  **Build the Docker container:**
+    `docker build -t hocs-sim .`
+3.  **Run the API server:**
+    `docker run -p 8000:8000 hocs-sim`
+
+---
 
 ## 🚀 Roadmap
-- [x] Design the Core Architecture
-- [x] Write Python Drivers (PYNQ)
-- [ ] Find a new computer to finish compilation (Urgent!)
-- [ ] Manufacture the PCB
-- [ ] First Light (Hardware Test)
 
-## 🤝 Support
-If you have an old workstation or FPGA board gathering dust, or if you are a professor who can help with lab access, please reach out. We want to finish this.
-## 📚 Citation
-If you use HOCS in your research, please cite as follows:
+- [x] Design the Core Architecture & Protocols (ICD)
+- [x] Develop Linux Kernel Module & Custom DMA
+- [x] Build PyTorch Compiler & Security Layer
+- [ ] **Urgent:** Secure a new workstation to resume full-scale development.
+- [ ] Manufacture the PCB Prototype.
+- [ ] Achieve "First Light" and gather real hardware data.
 
-```bibtex
-@software{hocs_core_2026,
-  author = {Cobanoglu, Muhammed Yusuf},
-  title = {HOCS: Hybrid Optical Computing System Architecture},
-  year = {2026},
-  version = {2.4.0},
-  publisher = {GitHub},
-  journal = {Experimental Optical Computing Repository},
-  url = {[https://github.com/CodeTheEagle/HOCS-Core-Architecture](https://github.com/CodeTheEagle/HOCS-Core-Architecture)}
-}
+---
 
+## 🤝 Support & Collaboration
+
+This is an ambitious project for a student. If you are a professor with lab access, an engineer with old FPGA gear, or a company interested in this architecture, please reach out. We have the design; we need the tools to build it.
 
 **Contact:** https://www.linkedin.com/in/muhammed-yusuf-%C3%A7obano%C4%9Flu-906625392?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
-
 **Location:** Diyarbakır / Adıyaman, Turkey
 
-> *Note: Diagram rendering might be broken on some browsers. I'm currently pushing updates via mobile, so please excuse the formatting glitches!*
+---
 
+## 📚 Citation
 
+If you use HOCS architecture or concepts in your research, please cite as follows:
 
-
-
+> Cobanoglu, M. Y. (2026). *HOCS: Hybrid Optical Computing System Architecture*. GitHub Repository. Version 2.4.0-alpha.
