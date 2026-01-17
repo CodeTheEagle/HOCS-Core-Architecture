@@ -1,4 +1,10 @@
 # HOCS: Hybrid Optical Computing System 🇹🇷
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Version](https://img.shields.io/badge/version-2.4.0--alpha-blue)
+![License](https://img.shields.io/badge/license-MIT%20%2B%20CERN-orange)
+![Platform](https://img.shields.io/badge/platform-Xilinx%20Kria%20%7C%20Linux-lightgrey)
+![Architecture](https://img.shields.io/badge/architecture-Hybrid%20Optical-red)
+
 
 ![Status](https://img.shields.io/badge/Status-Prototyping-orange)
 ![Platform](https://img.shields.io/badge/Platform-Xilinx%20Kria-red)
@@ -55,6 +61,20 @@ A: It is a behavioral model to verify logic flow (AXI Stream handshake, etc.). R
 
 ## 🤝 Support
 If you have an old workstation or FPGA board gathering dust, or if you are a professor who can help with lab access, please reach out. We want to finish this.
+## 📚 Citation
+If you use HOCS in your research, please cite as follows:
+
+```bibtex
+@software{hocs_core_2026,
+  author = {Cobanoglu, Muhammed Yusuf},
+  title = {HOCS: Hybrid Optical Computing System Architecture},
+  year = {2026},
+  version = {2.4.0},
+  publisher = {GitHub},
+  journal = {Experimental Optical Computing Repository},
+  url = {[https://github.com/CodeTheEagle/HOCS-Core-Architecture](https://github.com/CodeTheEagle/HOCS-Core-Architecture)}
+}
+
 
 **Contact:** https://www.linkedin.com/in/muhammed-yusuf-%C3%A7obano%C4%9Flu-906625392?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
 
@@ -78,31 +98,4 @@ HOCS-Project/
 ├── hardware/               # Constraints & PCB
 └── README.md
 
-## 🏗️ System Architecture
-The following diagram illustrates the full stack data flow from PyTorch to the Optical Core.
 
-```mermaid
-graph TD
-    subgraph Host_PC [Host Workstation (Layer 1)]
-        A[User / PyTorch Model] -->|Graph Trace| B(HOCS Compiler)
-        B -->|Assembly Gen| C{HOCS API Service}
-        C -->|REST / gRPC| D[AXI Driver Engine]
-        D -->|DMA Ring Buffer| E[Linux Kernel Module]
-    end
-
-    subgraph FPGA_SoC [Xilinx Kria KV260 (Layer 2)]
-        E -->|AXI4-Stream| F[AXI DMA Controller]
-        F -->|32-bit Stream| G[HOCS Logic Wrapper]
-        G -->|DAC Control| H[Analog Interface]
-    end
-
-    subgraph Optical_Core [Physics Layer (Layer 3)]
-        H -->|12-bit Voltage| I((CuO Memristor Array))
-        I -->|Photonic Multiplication| J((Analog Output))
-        J -->|ADC Readout| G
-    end
-
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style I fill:#ff9,stroke:#f66,stroke-width:4px,stroke-dasharray: 5 5
-    style E fill:#bbf,stroke:#333
-```
