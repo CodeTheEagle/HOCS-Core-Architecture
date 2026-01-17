@@ -1,18 +1,37 @@
-# HOCS Core Dependencies
-numpy>=1.21.0
-scipy>=1.7.0
-pandas>=1.3.0
+# HOCS (Hybrid Optical Computing System) Dependency Manifest
+# ==========================================================
+# Maintainer: Muhammed Yusuf Cobanoglu
+# Target Platform: Linux (Ubuntu/Kria OS) & Python 3.8+
 
-# API & Server
-fastapi>=0.68.0
-uvicorn>=0.15.0
-pydantic>=1.8.0
-python-multipart>=0.0.5
+# --- 1. CORE MATHEMATICS & PHYSICS SIMULATION ---
+# Temel matris islemleri ve optik sinyal simulasyonu icin olmazsa olmazlar.
+numpy>=1.24.0      # Matrix manipulation (The backbone of everything)
+scipy>=1.10.0      # Advanced signal processing for simulating analog noise
 
-# Hardware Interface (On Device Only)
-# Note: PYNQ is pre-installed on Kria images, but listed here for reference.
-pynq>=2.7.0; sys_platform == 'linux'
+# --- 2. DEEP LEARNING & COMPILER STACK ---
+# PyTorch modellerini alip kendi optik Assembly dilimize cevirmek icin.
+torch>=2.0.0       # Neural Network graph tracing (fx module)
+torchvision>=0.15.0 # Pre-trained vision models for benchmarking
 
-# Simulation & Visualization
-matplotlib>=3.4.0
-pyyaml>=5.4.0
+# --- 3. HARDWARE INTERFACE (FPGA/EDGE) ---
+# Xilinx Kria uzerindeki donanima (DMA, Register) erismek icin.
+# Not: PC'de simulasyon modunda bu kutuphaneler mocklanir.
+pynq>=3.0.1        # Xilinx Python Productivity for Zynq (Hardware Overlay)
+smbus2>=0.4.2      # I2C protocol for reading voltage sensors
+
+# --- 4. BACKEND API & DRIVER SERVICE ---
+# Optik cekirdegi dis dunyaya (veya Docker icine) servis etmek icin.
+fastapi>=0.95.0    # High-performance Async API framework
+uvicorn>=0.22.0    # ASGI Server to run the API
+pydantic>=1.10.0   # Data validation for incoming matrix payloads
+requests>=2.28.0   # For client-side testing scripts
+
+# --- 5. DEVELOPMENT & TESTING ---
+# Kod kalitesini korumak ve CI/CD surecleri icin.
+pytest>=7.3.0      # Unit testing framework
+pytest-asyncio     # Testing async API endpoints
+black>=23.3.0      # Code formatter (Because style matters)
+
+# --- 6. UTILITIES ---
+tqdm>=4.65.0       # Progress bars for long-running benchmarks
+psutil>=5.9.0      # Monitoring CPU temps and RAM usage during stress tests
