@@ -36,11 +36,24 @@ We are designing a special processor unit using **Copper Oxide (CuO)** memristor
 ---
 
 ## 📂 Project Structure
-Since my PC is broken, I cannot upload the full heavy bitstreams yet. But here is what is currently available:
+Since my main workstation hardware is currently down, I am maintaining the core architecture files here. Despite the limitations, the repository contains the full logic flow:
 
-* `drivers/` -> **hocs_exascale_driver.py**: This is the main control script. It includes a "Benchmark Mode" that stresses your CPU to prove why we need optical computing. (Warning: It might freeze your PC if you set matrix size too high!).
-* `simulation/` -> **Behavioral Models**: Python scripts to test the logic before we burn it to hardware.
-* `docs/` -> Technical details and my draft whitepaper.
+```text
+HOCS-Project/
+├── backend/                # API & Main Logic
+├── compiler/               # <--- NEW! (PyTorch to Optical-ASM Compiler)
+│   └── hocs_torch_bridge.py
+├── security/               # <--- NEW! (Post-Quantum Cryptography)
+│   └── post_quantum_auth.c
+├── memory/                 # Custom DMA Allocator
+├── asm/                    # ARM64 Assembly Kernels
+├── cpp_core/               # C++ Physics Engine
+├── kernel_driver/          # Linux Kernel Module
+├── hdl/                    # Verilog Hardware Design
+├── hardware/               # Constraints & PCB
+├── tests/                  # Unit Tests
+├── Dockerfile              # Container Setup
+└── README.md
 
 ## ⚠️ Known Issues / FAQ
 **Q: Is this ChatGPT code?**
