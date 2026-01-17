@@ -93,22 +93,6 @@ If you use HOCS in your research, please cite as follows:
 
 **Location:** Diyarbakır / Adıyaman, Turkey
 
-## 📂 Project Structure
-Here is an overview of the repository organization:
 
-```text
-HOCS-Project/
-├── backend/                # API & Main Logic
-├── compiler/               # <--- YENİ! (PyTorch to Optical-ASM Compiler)
-│   └── hocs_torch_bridge.py
-├── security/               # <--- YENİ! (Post-Quantum Cryptography)
-│   └── post_quantum_auth.c
-├── memory/                 # Custom DMA Allocator
-├── asm/                    # ARM64 Assembly Kernels
-├── cpp_core/               # C++ Physics Engine
-├── kernel_driver/          # Linux Kernel Module
-├── hdl/                    # Verilog Hardware Design
-├── hardware/               # Constraints & PCB
-└── README.md
 
 
