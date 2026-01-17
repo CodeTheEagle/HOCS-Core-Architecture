@@ -1,6 +1,14 @@
 # HOCS: Hybrid Optical Computing System 🇹🇷
 
-![Status](https://img.shields.io/badge/Status-Prototyping-orange) ![Version](https://img.shields.io/badge/Version-2.4.0--alpha-blue) ![Platform](https://img.shields.io/badge/Platform-Xilinx%20Kria_KV260-lightgrey) ![License](https://img.shields.io/badge/License-MIT%20%2B%20CERN-green)
+![Status](https://img.shields.io/badge/Status-Prototyping-orange)
+![Version](https://img.shields.io/badge/Version-2.4.0--alpha-blue)
+![License](https://img.shields.io/badge/License-MIT%20%2B%20CERN-green)
+
+![Platform](https://img.shields.io/badge/Platform-Xilinx%20Kria_KV260-lightgrey)
+![Languages](https://img.shields.io/badge/Languages-Python_%7C_C++_%7C_Verilog-blueviolet)
+![Framework](https://img.shields.io/badge/AI_Framework-PyTorch-red)
+![System](https://img.shields.io/badge/Driver-Linux_Kernel_Module-yellow)
+![Deploy](https://img.shields.io/badge/Deploy-Docker_Container-2496ED)
 
 > **Note:** This project is currently being maintained from a mobile device due to a critical hardware failure on the main development workstation. Please excuse any formatting glitches.
 
@@ -116,6 +124,7 @@ You can run the full HOCS software stack in simulation mode using Docker.
 This is an ambitious project for a student. If you are a professor with lab access, an engineer with old FPGA gear, or a company interested in this architecture, please reach out. We have the design; we need the tools to build it.
 
 **Contact:** https://www.linkedin.com/in/muhammed-yusuf-%C3%A7obano%C4%9Flu-906625392?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
+
 **Location:** Diyarbakır / Adıyaman, Turkey
 
 ---
