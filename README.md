@@ -57,4 +57,23 @@ A: It is a behavioral model to verify logic flow (AXI Stream handshake, etc.). R
 If you have an old workstation or FPGA board gathering dust, or if you are a professor who can help with lab access, please reach out. We want to finish this.
 
 **Contact:** https://www.linkedin.com/in/muhammed-yusuf-%C3%A7obano%C4%9Flu-906625392?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
+
 **Location:** Diyarbakır / Adıyaman, Turkey
+
+## 📂 Project Structure
+Here is an overview of the repository organization:
+
+```text
+HOCS-Project/
+├── drivers/
+│   └── hocs_exascale_driver.py   # High-performance Python driver & CPU Benchmark
+├── simulation/
+│   └── hocs_physics_engine.py    # Physics-aware behavioral model (CuO Memristor)
+├── docs/
+│   ├── whitepaper.pdf            # Technical details (Upcoming)
+│   └── HARDWARE_SPEC.md          # Voltage and Pin configurations
+├── LICENSE                       # Dual License (MIT + CERN OHL)
+├── NOTICE.md                     # Third-party attributions
+├── CONTRIBUTING.md               # Guidelines for contributors
+└── README.md                     # You are here!
+
