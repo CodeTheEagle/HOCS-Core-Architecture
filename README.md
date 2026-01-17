@@ -93,6 +93,9 @@ If you use HOCS in your research, please cite as follows:
 
 **Location:** Diyarbakır / Adıyaman, Turkey
 
+> *Note: Diagram rendering might be broken on some browsers. I'm currently pushing updates via mobile, so please excuse the formatting glitches!*
+
+
 
 
 
