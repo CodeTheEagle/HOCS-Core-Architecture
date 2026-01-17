@@ -1,0 +1,34 @@
+# HOCS System Configuration File
+# Version: 2.4.0-Alpha
+# Target Hardware: Xilinx Kria KV260 Vision AI Starter Kit
+
+system:
+  device_id: "HOCS_UNIT_01"
+  debug_mode: true
+  simulation_fallback: true  # Auto-switch to CPU if FPGA is offline
+
+hardware:
+  fpga:
+    bitstream_file: "bitstreams/hocs_core_v1.bit"
+    clock_frequency_mhz: 300
+    thermal_limit_celsius: 85.0
+    
+  dma:
+    base_address: 0x40000000
+    buffer_size_mb: 512
+    burst_length: 16
+
+optical_core:
+  dac_resolution_bits: 12
+  adc_resolution_bits: 12
+  cuo_memristor_layers: 1
+  noise_filtering:
+    enabled: true
+    algorithm: "kalman_filter"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  timeout_seconds: 30
+  
