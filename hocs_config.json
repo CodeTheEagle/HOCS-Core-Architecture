@@ -1,0 +1,35 @@
+{
+  "system": {
+    "version": "2.4.1",
+    "debug_mode": true,
+    "simulation": true,
+    "log_level": "INFO"
+  },
+  "hardware": {
+    "fpga": {
+      "bitstream_path": "hardware/kria_k26/hocs_core.bit",
+      "mmio_base_addr": "0xA0000000",
+      "dma_buffer_size": 4194304
+    },
+    "dlp": {
+      "i2c_bus": 1,
+      "i2c_addr": "0x1B",
+      "resolution": [1920, 1080],
+      "exposure_time_us": 105,
+      "trigger_mode": "EXTERNAL_POS"
+    },
+    "sensor": {
+      "interface": "MIPI_CSI2",
+      "lanes": 4,
+      "width": 1024,
+      "height": 1024,
+      "fps_target": 1000
+    }
+  },
+  "safety": {
+    "thermal_cutoff_c": 85.0,
+    "voltage_min_v": 0.95,
+    "voltage_max_v": 1.25,
+    "emergency_shutdown_gpio": 54
+  }
+}
