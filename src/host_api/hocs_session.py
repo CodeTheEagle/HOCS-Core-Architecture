@@ -6,7 +6,7 @@
 PROJECT: HOCS (Hybrid Optical Computing System)
 MODULE:  HOCS Session Manager (SDK Core)
 VERSION: 2.4.1-Enterprise
-AUTHOR:  CodeTheEagle Team (Yusuf & Mikail)
+AUTHOR:  CodeTheEagle Team (Yusuf,Mikail and Mert)
 DATE:    February 2026
 LICENSE: Proprietary & Confidential
 
