@@ -287,3 +287,94 @@ logic [NUM_LANES-1:0][30:0] prbs_lfsr;
             end
         end
     end
+logic [NUM_LANES-1:0][57:0] tx_scrambler_poly;
+    logic [NUM_LANES-1:0][ALIGNED_WIDTH-1:0] tx_scrambled_payload;
+    logic [NUM_LANES-1:0] tx_is_control_block;
+
+    generate
+        for (i = 0; i < NUM_LANES; i++) begin : TX_SCRAMBLER_GEARBOX
+
+            always_comb begin
+                if (tx_raw_data[i][63:56] == 8'h1E || tx_raw_data[i][63:56] == 8'h78 || tx_raw_data[i][63:56] == 8'h4B) begin
+                    tx_is_control_block[i] = 1'b1;
+                end else begin
+                    tx_is_control_block[i] = 1'b0;
+                end
+            end
+
+            always_ff @(posedge opt_tx_clk or negedge sys_aresetn) begin
+                if (!sys_aresetn) begin
+                    tx_scrambler_poly[i] <= 58'h3FFFFFFFFFFFFFF;
+                    tx_scrambled_data[i] <= '0;
+                    tx_scrambled_payload[i] <= '0;
+                end else begin
+                    if (current_state[i] == ST_RUN) begin
+                        for (int k = 0; k < ALIGNED_WIDTH; k++) begin
+                            tx_scrambled_payload[i][k] = tx_raw_data[i][k] ^ tx_scrambler_poly[i][38] ^ tx_scrambler_poly[i][57];
+                            tx_scrambler_poly[i] = {tx_scrambler_poly[i][56:0], tx_scrambler_poly[i][38] ^ tx_scrambler_poly[i][57]};
+                        end
+
+                        if (insert_am[i]) begin
+                            tx_scrambled_data[i] <= {64'hC198A7B2E4D5F609, 2'b10}; 
+                        end else if (tx_is_control_block[i]) begin
+                            tx_scrambled_data[i] <= {tx_scrambled_payload[i], 2'b10};
+                        end else begin
+                            tx_scrambled_data[i] <= {tx_scrambled_payload[i], 2'b01};
+                        end
+                    end else if (current_state[i] == ST_PRBS) begin
+                        tx_scrambled_data[i] <= {prbs_expected[i], ~prbs_expected[i][32:0], 2'b01};
+                    end else begin
+                        tx_scrambled_data[i] <= {64'h0000000000000000, 2'b10}; 
+                    end
+                end
+            end
+        end
+    endgenerate
+
+    logic [NUM_LANES-1:0][13:0] am_counter;
+    logic [NUM_LANES-1:0] insert_am;
+
+    generate
+        for (i = 0; i < NUM_LANES; i++) begin : ALIGNMENT_MARKER_INJECTION
+            always_ff @(posedge opt_tx_clk or negedge sys_aresetn) begin
+                if (!sys_aresetn) begin
+                    am_counter[i] <= '0;
+                    insert_am[i] <= 1'b0;
+                end else if (current_state[i] == ST_RUN) begin
+                    if (am_counter[i] == 14'h3FFF) begin
+                        am_counter[i] <= '0;
+                        insert_am[i] <= 1'b1;
+                    end else begin
+                        am_counter[i] <= am_counter[i] + 1;
+                        insert_am[i] <= 1'b0;
+                    end
+                end else begin
+                    am_counter[i] <= '0;
+                    insert_am[i] <= 1'b0;
+                end
+            end
+        end
+    endgenerate
+
+    logic [NUM_LANES-1:0][7:0] tx_fifo_wr_ptr;
+    logic [NUM_LANES-1:0][7:0] tx_fifo_rd_ptr;
+    logic [NUM_LANES-1:0][RAW_DATA_WIDTH-1:0] tx_elastic_buffer [255:0];
+
+    generate
+        for (i = 0; i < NUM_LANES; i++) begin : TX_ELASTIC_BUFFER
+            always_ff @(posedge opt_tx_clk or negedge sys_aresetn) begin
+                if (!sys_aresetn) begin
+                    tx_fifo_wr_ptr[i] <= '0;
+                    tx_fifo_rd_ptr[i] <= '0;
+                end else begin
+                    tx_elastic_buffer[tx_fifo_wr_ptr[i]] <= tx_scrambled_data[i];
+                    tx_fifo_wr_ptr[i] <= tx_fifo_wr_ptr[i] + 1;
+                    
+                    if (tx_fifo_wr_ptr[i] - tx_fifo_rd_ptr[i] > 128) begin
+                        tx_fifo_rd_ptr[i] <= tx_fifo_rd_ptr[i] + 1;
+                    end
+                end
+            end
+        end
+    endgenerate
+
