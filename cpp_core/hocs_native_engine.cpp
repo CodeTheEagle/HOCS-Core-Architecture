@@ -79,7 +79,8 @@ public:
                 double V = voltage_inputs[col];
                 
                 // Non-linear JART VCM Memristor Model Equation (Simplified)
-                double current = G * V * std::exp(-0.1 / (BOLTZMANN_K * crossbar_array[idx].temperature));
+                double current = G * V * std::exp(-(0.1 * ELECTRON_Q) / (BOLTZMANN_K * crossbar_array[idx].temperature));
+
                 
                 row_current_sum += current;
                 
